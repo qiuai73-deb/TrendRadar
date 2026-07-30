@@ -488,6 +488,7 @@ class NotificationDispatcher:
                 proxy_url=proxy_url,
                 mode=mode,
                 account_label=account_label,
+                secret=self.config.get("DINGTALK_SECRET", ""),
                 batch_size=self.config.get("DINGTALK_BATCH_SIZE", 20000),
                 batch_interval=self.config.get("BATCH_SEND_INTERVAL", 1.0),
                 split_content_func=self.split_content_func,

@@ -11,6 +11,14 @@ from typing import Dict, Any, Optional
 
 import yaml
 
+# 支持从项目根目录的 .env 读取密钥（本地运行用，GitHub Actions 用仓库 Secrets）
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except Exception:  # pragma: no cover - dotenv 为可选依赖
+    pass
+
 from .config import parse_multi_account_config, validate_paired_configs
 from trendradar.utils.time import DEFAULT_TIMEZONE
 
@@ -413,6 +421,7 @@ def _load_webhook_config(config_data: Dict) -> Dict:
         "FEISHU_WEBHOOK_URL": _get_env_str("FEISHU_WEBHOOK_URL") or feishu.get("webhook_url", ""),
         # 钉钉
         "DINGTALK_WEBHOOK_URL": _get_env_str("DINGTALK_WEBHOOK_URL") or dingtalk.get("webhook_url", ""),
+        "DINGTALK_SECRET": _get_env_str("DINGTALK_SECRET") or dingtalk.get("secret", ""),
         # 企业微信
         "WEWORK_WEBHOOK_URL": _get_env_str("WEWORK_WEBHOOK_URL") or wework.get("webhook_url", ""),
         "WEWORK_MSG_TYPE": _get_env_str("WEWORK_MSG_TYPE") or wework.get("msg_type", "markdown"),

@@ -18,6 +18,9 @@
 import smtplib
 import time
 import json
+import hmac
+import hashlib
+import base64
 from datetime import datetime
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -25,7 +28,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr, formatdate, make_msgid
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote_plus
 
 import requests
 
@@ -236,6 +239,7 @@ def send_to_dingtalk(
     mode: str = "daily",
     account_label: str = "",
     *,
+    secret: str = "",
     batch_size: int = 20000,
     batch_interval: float = 1.0,
     split_content_func: Callable = None,
@@ -272,6 +276,20 @@ def send_to_dingtalk(
 
     # 日志前缀
     log_prefix = f"钉钉{account_label}" if account_label else "钉钉"
+
+    # 钉钉「加签」安全：用当前时间戳动态计算签名并拼接到 URL
+    if secret:
+        timestamp = str(round(time.time() * 1000))
+        string_to_sign = f"{timestamp}\n{secret}"
+        hmac_code = hmac.new(
+            secret.encode("utf-8"),
+            string_to_sign.encode("utf-8"),
+            digestmod=hashlib.sha256,
+        ).digest()
+        sign = quote_plus(base64.b64encode(hmac_code))
+        sep = "&" if "?" in webhook_url else "?"
+        webhook_url = f"{webhook_url}{sep}timestamp={timestamp}&sign={sign}"
+        print(f"{log_prefix}已附加加签参数（timestamp={timestamp}）")
 
     # 渲染 AI 分析内容并提取统计数据
     ai_content = _render_ai_analysis(ai_analysis, "dingtalk") if ai_analysis else None

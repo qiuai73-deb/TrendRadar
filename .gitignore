@@ -1,0 +1,23 @@
+# 虚拟环境
+.venv/
+venv/
+
+# 本地密钥（含钉钉 token / 加签密钥 / AI Key，切勿提交）
+.env
+.env.*
+!.env.example
+
+# 运行产物
+output/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.db
+
+# 生成的报告（Actions 运行时会重新生成）
+index.html
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store

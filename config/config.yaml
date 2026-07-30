@@ -175,7 +175,7 @@ report:
 # 4.5 筛选策略
 # ===============================================================
 filter:
-  method: "keyword"                     # 筛选方式（二选一）
+  method: "ai"                     # 筛选方式（二选一）
                                        # keyword = 关键词匹配，不调用 AI，不消耗 token，但规则固定
                                        #           词组定义在 config/frequency_words.txt
                                        # ai = AI 智能分类，更灵活但每次运行消耗 token
@@ -269,7 +269,8 @@ notification:
       webhook_url: ""                 # 飞书机器人 webhook URL
 
     dingtalk:
-      webhook_url: ""                 # 钉钉机器人 webhook URL
+      webhook_url: ""                 # 钉钉机器人 webhook URL（密钥走环境变量 DINGTALK_WEBHOOK_URL / GitHub Secrets）
+      secret: ""                          # 钉钉机器人「加签」密钥（以 SEC 开头）；走环境变量 DINGTALK_SECRET / GitHub Secrets，留空表示不用加签
 
     wework:
       webhook_url: ""                 # 企业微信机器人 webhook URL
@@ -365,7 +366,7 @@ ai:
 
   model: "deepseek/deepseek-v4-flash"
 
-  api_key: ""                       # API Key（建议使用环境变量 AI_API_KEY）
+  api_key: ""                       # API Key（走环境变量 AI_API_KEY / GitHub Secrets）
   
   api_base: ""                      # 自定义 API 地址（可选，绝大多数情况留空即可）
                                     #
