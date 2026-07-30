@@ -45,7 +45,10 @@ concurrency:
 
 permissions:
   contents: read
+  pages: write        # 新增
+  id-token: write     # 新增
   actions: write
+
 
 jobs:
   crawl:
@@ -214,3 +217,13 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy cloudflare_dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          
+      - name: Upload Pages artifact
+        if: success()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output        # TrendRadar 把报告生成在 output/ 目录
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: actions/deploy-pages@v4
+
