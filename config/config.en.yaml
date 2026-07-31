@@ -269,8 +269,8 @@ notification:
     feishu:
       webhook_url: ""                 # Feishu bot webhook URL
 
-    dingtalk:
-      webhook_url: ""                 # DingTalk bot webhook URL
+#   dingtalk:
+#     webhook_url: ""                 # DingTalk bot webhook URL
 
     wework:
       webhook_url: ""                 # WeCom (Enterprise WeChat) bot webhook URL
